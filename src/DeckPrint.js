@@ -150,7 +150,7 @@ export default function DeckPrint({ deckList }) {
                   ) : (
                     <>
                       <p className="text-2xl font-bold">{card.title}</p>
-                      <p className="text-xl whitespace-pre-wrap">
+                      <p className="text-xl whitespace-pre-wrap leading-5">
                         {card.description}
                       </p>
                       <p className="absolute bottom-2 right-4 font-bold">
