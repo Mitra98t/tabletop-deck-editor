@@ -59,28 +59,44 @@ function App() {
     quantity: 0,
     tags: [],
   });
+  const [files, setFiles] = useState("");
+
+  const handleChange = (e) => {
+    const fileReader = new FileReader();
+    fileReader.readAsText(e.target.files[0], "UTF-8");
+    fileReader.onload = (e) => {
+      console.log("e.target.result", e.target.result);
+      setFiles(e.target.result);
+      setDeckList(JSON.parse(e.target.result));
+      setSelectedDeck(JSON.parse(e.target.result)[0].name);
+    };
+  };
+
   const [selectedDeck, setSelectedDeck] = useState("Spell");
   return (
     <div className="w-full min-h-screen px-8 py-24 bg-slate-900 text-slate-300 animationWrapper">
       <div className="z-50 fixed inset-0 px-8 py-6 bg-slate-900  w-full h-fit flex items-center justify-start gap-4">
-        <button
-          className="font-bold text-3xl text-base-content btn btn-ghost"
-          onClick={() => setPath("home")}
-        >
-          Tabletop Deck Editor
-        </button>
-        <button
-          className="font-bold text-2xl text-base-content btn btn-ghost"
-          onClick={() => setPath("deck-editor")}
-        >
-          Deck Editor
-        </button>
-        <button
-          className="font-bold text-2xl text-base-content btn btn-ghost"
-          onClick={() => setPath("deck-print")}
-        >
-          Print Deck
-        </button>
+        <div className="w-full h-fit flex items-center justify-start gap-4">
+          <button
+            className="font-bold text-3xl text-base-content btn btn-ghost"
+            onClick={() => setPath("home")}
+          >
+            Tabletop Deck Editor
+          </button>
+          <button
+            className="font-bold text-2xl text-base-content btn btn-ghost"
+            onClick={() => setPath("deck-editor")}
+          >
+            Deck Editor
+          </button>
+          <button
+            className="font-bold text-2xl text-base-content btn btn-ghost"
+            onClick={() => setPath("deck-print")}
+          >
+            Print Deck
+          </button>
+        </div>
+        <input type="file" onChange={handleChange} />
       </div>
       <div className="w-full h-full p-4">
         {path === "home" && <Home setPath={setPath} />}
