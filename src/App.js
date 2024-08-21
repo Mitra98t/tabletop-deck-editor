@@ -6,6 +6,21 @@ import DeckEditor from "./DeckEditor";
 import DeckPrint from "./DeckPrint";
 
 function App() {
+  const [tagRegex, _] = useState([
+    [/esauri[\S+\s+]+tok/gm, "Esaurire Tok"],
+    [/tok[\S+\s+]+esauri/gm, "Esaurire Tok"],
+    [/ottien[\S+\s+]+tok/gm, "Ottenere Tok"],
+    [/ottener[\S+\s+]+tok/gm, "Ottenere Tok"],
+    [/sacrific[\S+\s+]+tok/gm, "Sacrificare Tok"],
+    [/tok[\S+\s+]+sacrific/gm, "Sacrificare Tok"],
+    [/sacrific[\S+|\s+]+loot/gm, "Sacrificare Loot"],
+    [/sacrific[\S+|\s+]+oggetto/gm, "Sacrificare Loot"],
+    [/pesc[\S+|\s+]+loot/gm, "Pescare Loot"],
+    [/ripristin[\S+|\s+]+tok/gm, "Ripristinare Tok"],
+    [/pesc[\S+|\s+]+magi/gm, "Pescare Magie"],
+    [/\d+\s+dann[\S+|\s+]+\+\s+\d+d\d+/gm, "Danno Rng"],
+    [/\d+\s+difes[\S+|\s+]+\+\s+\d+d\d+/gm, "Difesa Rng"],
+  ]);
   const saveDeckListToLocalStorage = (deckList) => {
     localStorage.setItem("deckList", JSON.stringify(deckList));
   };
@@ -65,10 +80,12 @@ function App() {
     const fileReader = new FileReader();
     fileReader.readAsText(e.target.files[0], "UTF-8");
     fileReader.onload = (e) => {
-      console.log("e.target.result", e.target.result);
       setFiles(e.target.result);
       setDeckList(JSON.parse(e.target.result));
       setSelectedDeck(JSON.parse(e.target.result)[0].name);
+      saveDeckListToLocalStorage(JSON.parse(e.target.result));
+
+      window.location.reload();
     };
   };
 
@@ -99,7 +116,9 @@ function App() {
         <input type="file" onChange={handleChange} />
       </div>
       <div className="w-full h-full p-4">
-        {path === "home" && <Home setPath={setPath} />}
+        {path === "home" && (
+          <Home setPath={setPath} deckList={deckList} tagRegex={tagRegex} />
+        )}
         {path === "deck-print" && <DeckPrint deckList={deckList} />}
         {path === "deck-editor" && (
           <DeckEditor
@@ -110,6 +129,7 @@ function App() {
             selectedDeck={selectedDeck}
             setSelectedDeck={setSelectedDeck}
             saveDeckListToLocalStorage={saveDeckListToLocalStorage}
+            tagRegex={tagRegex}
           />
         )}
       </div>

@@ -1,6 +1,7 @@
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import React, { useEffect, useState } from "react";
+import Card from "./Card";
 
 export default function DeckPrint({ deckList }) {
   const [isBack, setIsBack] = useState(false);
@@ -138,41 +139,7 @@ export default function DeckPrint({ deckList }) {
               }
             >
               {page.map((card, j) => (
-                <div
-                  key={j + "card"}
-                  className={
-                    "w-[60mm] h-[80mm] border-4 text-black border-black flex flex-col gap-2 p-2 relative" +
-                    (isBack ? " items-center justify-center " : "")
-                  }
-                >
-                  {isBack ? (
-                    <p className="text-4xl font-bold">{card.deckName}</p>
-                  ) : (
-                    <>
-                      <p className="text-2xl font-bold">{card.title}</p>
-                      <p className="text-xl whitespace-pre-wrap leading-5">
-                        {card.description}
-                      </p>
-                      <p className="absolute bottom-2 right-4 font-bold">
-                        {card.deckName}
-                      </p>
-                      <div
-                        className={
-                          "rounded-full w-7 aspect-square absolute bottom-2 left-2 " +
-                          (card.type === "RED"
-                            ? "bg-red-500"
-                            : card.type === "BLUE"
-                            ? "bg-blue-500"
-                            : card.type === "GREEN"
-                            ? "bg-green-500"
-                            : card.type === "MIX"
-                            ? "bg-yellow-500"
-                            : "bg-gray-500")
-                        }
-                      ></div>
-                    </>
-                  )}
-                </div>
+                <Card idx={j} isBack={isBack} card={card} />
               ))}
             </div>
           </div>

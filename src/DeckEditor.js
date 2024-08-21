@@ -9,25 +9,10 @@ export default function DeckEditor({
   selectedDeck,
   setSelectedDeck,
   saveDeckListToLocalStorage,
+  tagRegex,
 }) {
   const [isInEdit, setIsInEdit] = useState(false);
   const getTags = (description) => {
-    const tagRegex = [
-      [/esauri[\S+\s+]+tok/gm, "Esaurire Tok"],
-      [/tok[\S+\s+]+esauri/gm, "Esaurire Tok"],
-      [/ottien[\S+\s+]+tok/gm, "Ottenere Tok"],
-      [/ottener[\S+\s+]+tok/gm, "Ottenere Tok"],
-      [/sacrific[\S+\s+]+tok/gm, "Sacrificare Tok"],
-      [/tok[\S+\s+]+sacrific/gm, "Sacrificare Tok"],
-      [/sacrific[\S+|\s+]+loot/gm, "Sacrificare Loot"],
-      [/sacrific[\S+|\s+]+oggetto/gm, "Sacrificare Loot"],
-      [/pesc[\S+|\s+]+loot/gm, "Pescare Loot"],
-      [/ripristin[\S+|\s+]+tok/gm, "Ripristinare Tok"],
-      [/pesc[\S+|\s+]+magi/gm, "Pescare Magie"],
-      [/\d+\s+dann[\S+|\s+]+\+\s+\d+d\d+/gm, "Danno Rng"],
-      [/\d+\s+difes[\S+|\s+]+\+\s+\d+d\d+/gm, "Difesa Rng"],
-    ];
-
     let tags = [];
     tagRegex.forEach((tag) => {
       if (description.toLowerCase().match(tag[0]) && !tags.includes(tag[1])) {
@@ -88,7 +73,6 @@ export default function DeckEditor({
                 let oldCard = { ...currentCard, description: e.target.value };
                 let tags = getTags(oldCard.description);
                 oldCard.tags = tags;
-                console.log(tags);
                 setCurrentCard(oldCard);
               }}
             />
