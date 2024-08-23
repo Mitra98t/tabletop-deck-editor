@@ -131,8 +131,16 @@ export default function DeckPrint({ deckListIn }) {
         {pagingSystem.map((page, i) => (
           <div
             key={i + "page"}
-            className="page w-[210mm] min-h-[297mm] h-fit bg-white p-[10mm]"
+            className="page w-[210mm] min-h-[297mm] h-fit bg-white p-[10mm] relative"
           >
+            <div className="absolute w-1 h-full top-0 left-[10mm] bg-black"></div>
+            <div className="absolute w-1 h-full top-0 left-[70mm] bg-black"></div>
+            <div className="absolute w-1 h-full top-0 left-[130mm] bg-black"></div>
+            <div className="absolute w-1 h-full top-0 left-[190mm] bg-black"></div>
+            <div className="absolute w-full h-1 top-[10mm] left-0 bg-black"></div>
+            <div className="absolute w-full h-1 top-[90mm] left-0 bg-black"></div>
+            <div className="absolute w-full h-1 top-[170mm] left-0 bg-black"></div>
+            <div className="absolute w-full h-1 top-[250mm] left-0 bg-black"></div>
             <div
               className={
                 "w-full h-full flex flex-wrap items-start justify-start" +
