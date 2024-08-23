@@ -6,6 +6,10 @@
   @apply duration-200 transition-all ease-in-out
 }
 
+.animationBlock{
+  @apply !transition-none 
+}
+
 .btn-outline {
   @apply bg-transparent outline outline-blue-500 hover:bg-blue-500 text-blue-500 hover:text-white font-bold py-2 px-4 rounded-xl;
 }
@@ -21,7 +25,7 @@
 }
 
 .btn-ghost {
-  @apply bg-transparent  hover:bg-[#ffffff15] text-white font-bold py-2 px-4 rounded-xl;
+  @apply bg-transparent  hover:bg-[#ffffff15] font-bold py-2 px-4 rounded-xl;
 }
 
 input {

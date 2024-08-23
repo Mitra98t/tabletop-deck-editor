@@ -3,8 +3,9 @@ import jsPDF from "jspdf";
 import React, { useEffect, useState } from "react";
 import Card from "./Card";
 
-export default function DeckPrint({ deckList }) {
+export default function DeckPrint({ deckListIn }) {
   const [isBack, setIsBack] = useState(false);
+  const [deckList, setDeckList] = useState(deckListIn);
   const [decksToPrint, setDecksToPrint] = useState(
     deckList.map((deck) => deck.name)
   );
@@ -17,7 +18,7 @@ export default function DeckPrint({ deckList }) {
           for (let i = 0; i < card.quantity; i++) {
             let cardCopy = { ...card };
             cardCopy.deckName = deck.name;
-            allCards.push(cardCopy);
+            if (!cardCopy.hidden) allCards.push(cardCopy);
           }
         });
     });
@@ -38,7 +39,7 @@ export default function DeckPrint({ deckList }) {
       );
     }
     setPagingSystem(pagingSystem);
-  }, [decksToPrint]);
+  }, [decksToPrint, deckList]);
 
   const printDocument = () => {
     const input = document.getElementById("divToPrint");
@@ -83,7 +84,7 @@ export default function DeckPrint({ deckList }) {
     doc.save("cards.pdf");
   };
   return (
-    <div className="w-full flex flex-row gap-4">
+    <div className="w-full flex flex-row gap-4 justify-between">
       <button
         className="fixed bottom-4 left-4 btn btn-outline btn-success"
         onClick={() => handleDownloadPdf()}
@@ -144,6 +145,70 @@ export default function DeckPrint({ deckList }) {
             </div>
           </div>
         ))}
+      </div>
+      <div className="w-1/4 max-h-[48rem] overflow-y-scroll bg-slate-800 rounded-2xl flex flex-col gap-2 p-4">
+        <div className="w-full h-fit flex flex-row items-center justify-between">
+          <p className="font-bold text-2xl">Card Selection</p>
+          <div className="w-fit h-fit flex flex-row items-center justify-between gap-2">
+            <button
+              onClick={() => {
+                let newDeckList = [...deckList];
+                newDeckList.forEach((deck) => {
+                  deck.cards.forEach((card) => {
+                    card.hidden = false;
+                  });
+                });
+                setDeckList(newDeckList);
+              }}
+              className="text-xl px-2 rounded-lg outline outline-2 outline-blue-500 hover:outline-[3px]"
+            >
+              Select all
+            </button>
+            <button
+              onClick={() => {
+                let newDeckList = [...deckList];
+                newDeckList.forEach((deck) => {
+                  deck.cards.forEach((card) => {
+                    card.hidden = true;
+                  });
+                });
+                setDeckList(newDeckList);
+              }}
+              className="text-xl px-2 rounded-lg outline outline-2 outline-blue-500 hover:outline-[3px]"
+            >
+              Deselect all
+            </button>
+          </div>
+        </div>
+        {deckList.map((deck, i) =>
+          decksToPrint.indexOf(deck.name) !== -1 ? (
+            <div className="flex flex-col gap-1" key={deck.name}>
+              <p className="text-xl font-bold">{deck.name}</p>
+              {deck.cards.map((card, j) => (
+                <div
+                  className="w-full h-fit flex flex-row items-center justify-start gap-2"
+                  key={j + "card"}
+                >
+                  <button
+                    onClick={() => {
+                      let newDeckList = [...deckList];
+                      newDeckList[i].cards[j].hidden =
+                        !newDeckList[i].cards[j].hidden;
+                      setDeckList(newDeckList);
+                    }}
+                    className={
+                      "w-6 aspect-square rounded-full " +
+                      (card.hidden ? " bg-red-400" : "bg-green-400")
+                    }
+                  />
+                  <p className="text-lg ">{card.title}</p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <></>
+          )
+        )}
       </div>
     </div>
   );

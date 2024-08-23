@@ -1,5 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Editor } from "@monaco-editor/react";
+import { Doughnut } from "react-chartjs-2";
+import { PieChart } from "@mui/x-charts/PieChart";
+
+import { Chart, ArcElement } from "chart.js";
+import { palette } from "./utils";
+Chart.register(ArcElement);
 
 export default function DeckEditor({
   deckList,
@@ -11,7 +17,51 @@ export default function DeckEditor({
   saveDeckListToLocalStorage,
   tagRegex,
 }) {
-  const [isInEdit, setIsInEdit] = useState(false);
+  const populateChart = () => {
+    let quantityByType = {
+      RED: 0,
+      BLUE: 0,
+      GREEN: 0,
+      MIX: 0,
+    };
+    deckList
+      .find((deck) => deck.name === selectedDeck)
+      .cards.forEach((card) => {
+        quantityByType[card.type] += card.quantity - 0;
+      });
+
+    console.log(quantityByType);
+
+    setCardTypesChartData({
+      labels: ["Red", "Blue", "Green", "Mix"],
+      datasets: [
+        {
+          label: "Card Types",
+          data: [
+            quantityByType.RED,
+            quantityByType.BLUE,
+            quantityByType.GREEN,
+            quantityByType.MIX,
+          ],
+          backgroundColor: [
+            palette.RED,
+            palette.BLUE,
+            palette.GREEN,
+            palette.MIX,
+          ],
+          hoverOffset: 4,
+        },
+      ],
+    });
+  };
+
+  const [cardTypesChartData, setCardTypesChartData] = useState(null);
+
+  useEffect(() => {
+    populateChart();
+  }, [deckList, selectedDeck]);
+
+  const [isInEdit, setIsInEdit] = useState("");
   const getTags = (description) => {
     let tags = [];
     tagRegex.forEach((tag) => {
@@ -23,34 +73,80 @@ export default function DeckEditor({
   };
   return (
     <div className="w-full h-full flex gap-4">
-      <div className="w-1/3 h-full bg-slate-800 rounded-2xl p-4 flex flex-col gap-2 items-start ">
-        <p className="text-2xl font-bold ">Decks</p>
-        {deckList.map((deck, i) => (
+      <div className="w-1/3 h-full flex flex-col gap-4 items-start">
+        <div className="w-full h-full bg-slate-800 rounded-2xl p-4 flex flex-col gap-2 items-start ">
+          <p className="text-2xl font-bold ">Decks</p>
+          {deckList.map((deck, i) => (
+            <button
+              key={i + "deck"}
+              className={
+                "btn w-full " +
+                (selectedDeck === deck.name ? "btn-primary" : "btn-outline")
+              }
+              onClick={() => setSelectedDeck(deck.name)}
+            >
+              {deck.name}
+            </button>
+          ))}
           <button
-            key={i + "deck"}
-            className={
-              "btn w-full " +
-              (selectedDeck === deck.name ? "btn-primary" : "btn-outline")
-            }
-            onClick={() => setSelectedDeck(deck.name)}
+            className="fixed bottom-3 left-3 btn btn-outline btn-success"
+            onClick={() => {
+              const a = document.createElement("a");
+              const file = new Blob([JSON.stringify(deckList)], {
+                type: "application/json",
+              });
+              a.href = URL.createObjectURL(file);
+              a.download = "decks.json";
+              a.click();
+            }}
           >
-            {deck.name}
+            Save Decks to File
           </button>
-        ))}
-        <button
-          className="fixed bottom-3 left-3 btn btn-outline btn-success"
-          onClick={() => {
-            const a = document.createElement("a");
-            const file = new Blob([JSON.stringify(deckList)], {
-              type: "application/json",
-            });
-            a.href = URL.createObjectURL(file);
-            a.download = "decks.json";
-            a.click();
-          }}
-        >
-          Save Decks to File
-        </button>
+        </div>
+        <div className="w-full aspect-square bg-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center gap-4 ">
+          {cardTypesChartData && (
+            <>
+              <div className="w-full h-fit flex items-center justify-evenly">
+                <p
+                  className={
+                    "bg-[" + palette.RED + "] w-fit h-fit px-2 rounded-lg"
+                  }
+                >
+                  Red
+                </p>
+                <p
+                  className={
+                    "bg-[" + palette.BLUE + "] w-fit h-fit px-2 rounded-lg"
+                  }
+                >
+                  Blue
+                </p>
+                <p
+                  className={
+                    "bg-[" + palette.GREEN + "] w-fit h-fit px-2 rounded-lg"
+                  }
+                >
+                  Green
+                </p>
+                <p
+                  className={
+                    "bg-[" + palette.MIX + "] w-fit h-fit px-2 rounded-lg"
+                  }
+                >
+                  Mix
+                </p>
+              </div>
+              <Doughnut
+                options={{
+                  tooltip: {
+                    enabled: true,
+                  },
+                }}
+                data={cardTypesChartData}
+              />
+            </>
+          )}
+        </div>
       </div>
       {selectedDeck && (
         <>
@@ -117,7 +213,7 @@ export default function DeckEditor({
             <button
               className="btn btn-primary w-full"
               onClick={() => {
-                if (isInEdit) {
+                if (isInEdit !== "") {
                   if (
                     currentCard.title === "" ||
                     currentCard.description === "" ||
@@ -129,14 +225,21 @@ export default function DeckEditor({
                   }
 
                   let oldDeckList = [...deckList];
+                  if (
+                    currentCard.title !== isInEdit &&
+                    oldDeckList
+                      .find((deck) => deck.name === selectedDeck)
+                      .cards.find((card) => card.title === currentCard.title)
+                  ) {
+                    alert("Card already exists in deck");
+                    return;
+                  }
                   oldDeckList
                     .find((deck) => deck.name === selectedDeck)
                     .cards.splice(
                       oldDeckList
                         .find((deck) => deck.name === selectedDeck)
-                        .cards.findIndex(
-                          (card) => card.title === currentCard.title
-                        ),
+                        .cards.findIndex((card) => card.title === isInEdit),
                       1,
                       currentCard
                     );
@@ -148,7 +251,7 @@ export default function DeckEditor({
                     type: "",
                     quantity: 0,
                   });
-                  setIsInEdit(false);
+                  setIsInEdit("");
                   return;
                 }
 
@@ -191,10 +294,63 @@ export default function DeckEditor({
           <div className="w-full h-[45rem] bg-slate-800 rounded-2xl p-4 flex flex-col gap-4">
             <p className="text-2xl font-bold ">Card List</p>
             <div className="w-full h-auto bg-slate-900 p-4 rounded-2xl grid grid-cols-6 gap-2">
-              <p className="text-xl font-bold">title</p>
-              <p className="text-xl font-bold col-span-2">description</p>
-              <p className="text-xl font-bold">type</p>
-              <p className="text-xl font-bold">quantity</p>
+              <button
+                onClick={() => {
+                  let oldDeckList = [...deckList];
+                  oldDeckList
+                    .find((deck) => deck.name === selectedDeck)
+                    .cards.sort((a, b) => a.title.localeCompare(b.title));
+                  setDeckList(oldDeckList);
+                  saveDeckListToLocalStorage(oldDeckList);
+                }}
+                className="w-fit h-fit flex flex-row gap-2 items-start btn-ghost"
+              >
+                <p className="text-xl font-bold">Title</p>
+              </button>
+              <p className="text-xl font-bold col-span-2 btn-ghost hover:bg-transparent">
+                Description
+              </p>
+              <button
+                onClick={() => {
+                  let oldDeckList = [...deckList];
+                  oldDeckList
+                    .find((deck) => deck.name === selectedDeck)
+                    .cards.sort((a, b) => {
+                      if (a.type === b.type) {
+                        return 0;
+                      }
+                      if (a.type === "RED") {
+                        return -1;
+                      }
+                      if (a.type === "BLUE" && b.type === "GREEN") {
+                        return -1;
+                      }
+                      if (a.type === "GREEN" && b.type === "MIX") {
+                        return -1;
+                      }
+                      return 1;
+                    });
+                  setDeckList(oldDeckList);
+                  saveDeckListToLocalStorage(oldDeckList);
+                }}
+                className="w-fit h-fit flex flex-row gap-2 items-start btn-ghost"
+              >
+                <p className="text-xl font-bold">Type</p>
+              </button>
+              <button
+                onClick={() => {
+                  console.log("sorting");
+                  let oldDeckList = [...deckList];
+                  oldDeckList
+                    .find((deck) => deck.name === selectedDeck)
+                    .cards.sort((a, b) => b.quantity - a.quantity);
+                  setDeckList(oldDeckList);
+                  saveDeckListToLocalStorage(oldDeckList);
+                }}
+                className="w-fit h-fit flex flex-row gap-2 items-start btn-ghost"
+              >
+                <p className="text-xl font-bold">Quantity</p>
+              </button>
             </div>
             <div className="w-full h-full bg-slate-900 rounded-2xl flex flex-col divide-y divide-base-content overflow-y-scroll">
               {deckList
@@ -204,28 +360,36 @@ export default function DeckEditor({
                     key={i + "card"}
                     className="w-full h-auto p-4 grid grid-cols-6 gap-3"
                   >
-                    <p className="text-xl font-bold">{card.title}</p>
-                    <p className=" col-span-2">{card.description}</p>
-                    <p
-                      className={
-                        " w-fit h-fit p-2 font-bold rounded-xl " +
-                        (card.type === "RED"
-                          ? "bg-red-700"
-                          : card.type === "BLUE"
-                          ? "bg-blue-700"
-                          : card.type === "GREEN"
-                          ? "bg-green-700"
-                          : card.type === "MIX"
-                          ? "bg-yellow-700"
-                          : "bg-neutral-700")
-                      }
-                    >
-                      {card.type}
+                    <p className="pl-2 flex items-center justify-start text-xl font-bold">
+                      {card.title}
                     </p>
-                    <p>{card.quantity}</p>
-                    <div className="flex gap-4">
+                    <p className="pl-2 flex items-center justify-start col-span-2">
+                      {card.description}
+                    </p>
+                    <div className="pl-2 flex items-center justify-start w-full h-full">
+                      <p
+                        className={
+                          "w-fit h-fit p-2 font-bold rounded-xl " +
+                          (card.type === "RED"
+                            ? "bg-[" + palette.RED + "]"
+                            : card.type === "BLUE"
+                            ? "bg-[" + palette.BLUE + "]"
+                            : card.type === "GREEN"
+                            ? "bg-[" + palette.GREEN + "]"
+                            : card.type === "MIX"
+                            ? "bg-[" + palette.MIX + "]"
+                            : "bg-neutral-700")
+                        }
+                      >
+                        {card.type}
+                      </p>
+                    </div>
+                    <p className="pl-2 flex items-center justify-start">
+                      {card.quantity}
+                    </p>
+                    <div className="flex items-center justify-center gap-4">
                       <button
-                        className="btn  btn-error"
+                        className="btn  btn-error h-fit"
                         onClick={() => {
                           let oldDeckList = [...deckList];
                           oldDeckList
@@ -238,10 +402,10 @@ export default function DeckEditor({
                         X
                       </button>
                       <button
-                        className="btn  btn-warn"
+                        className="btn  btn-warn h-fit"
                         onClick={() => {
                           setCurrentCard(card);
-                          setIsInEdit(true);
+                          setIsInEdit(card.title);
                         }}
                       >
                         Edit

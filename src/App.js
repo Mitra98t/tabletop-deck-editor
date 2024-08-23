@@ -91,7 +91,7 @@ function App() {
 
   const [selectedDeck, setSelectedDeck] = useState("Spell");
   return (
-    <div className="w-full min-h-screen px-8 py-24 bg-slate-900 text-slate-300 animationWrapper">
+    <div className="w-full min-h-screen px-8 pt-24 bg-slate-900 text-slate-300 animationWrapper">
       <div className="z-50 fixed inset-0 px-8 py-6 bg-slate-900  w-full h-fit flex items-center justify-start gap-4">
         <div className="w-full h-fit flex items-center justify-start gap-4">
           <button
@@ -119,7 +119,7 @@ function App() {
         {path === "home" && (
           <Home setPath={setPath} deckList={deckList} tagRegex={tagRegex} />
         )}
-        {path === "deck-print" && <DeckPrint deckList={deckList} />}
+        {path === "deck-print" && <DeckPrint deckListIn={deckList} />}
         {path === "deck-editor" && (
           <DeckEditor
             deckList={deckList}
