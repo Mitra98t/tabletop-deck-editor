@@ -176,11 +176,11 @@ export default function Home({ setPath, deckList, tagRegex }) {
           )}
         </div>
       )}
-      {graphData.nodes.length !== 0 && (
+      {/* {graphData.nodes.length !== 0 && (
         <div className="w-fit h-fit bg-slate-800 rounded-2xl overflow-hidden">
           <Graph graph={graphData} options={options} events={eventObj} />
         </div>
-      )}
+      )} */}
     </div>
   );
 }
