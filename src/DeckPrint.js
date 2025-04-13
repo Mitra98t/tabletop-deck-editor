@@ -23,8 +23,8 @@ export default function DeckPrint({ deckListIn }) {
         });
     });
 
-    const cardWidth = 60;
-    const cardHeight = 80;
+    const cardWidth = 70;
+    const cardHeight = 70;
     const pageWidth = 210;
     const pageHeight = 297;
 
@@ -84,7 +84,7 @@ export default function DeckPrint({ deckListIn }) {
     doc.save("cards.pdf");
   };
   return (
-    <div className="w-full flex flex-row gap-4 justify-between">
+    <div className="w-full flex flex-row gap-4 justify-between p-0">
       <button
         className="fixed bottom-4 left-4 btn btn-outline btn-success"
         onClick={() => handleDownloadPdf()}
@@ -133,14 +133,6 @@ export default function DeckPrint({ deckListIn }) {
             key={i + "page"}
             className="page w-[210mm] min-h-[297mm] h-fit bg-white p-[10mm] relative"
           >
-            <div className="absolute w-1 h-full top-0 left-[10mm] bg-black"></div>
-            <div className="absolute w-1 h-full top-0 left-[70mm] bg-black"></div>
-            <div className="absolute w-1 h-full top-0 left-[130mm] bg-black"></div>
-            <div className="absolute w-1 h-full top-0 left-[190mm] bg-black"></div>
-            <div className="absolute w-full h-1 top-[10mm] left-0 bg-black"></div>
-            <div className="absolute w-full h-1 top-[90mm] left-0 bg-black"></div>
-            <div className="absolute w-full h-1 top-[170mm] left-0 bg-black"></div>
-            <div className="absolute w-full h-1 top-[250mm] left-0 bg-black"></div>
             <div
               className={
                 "w-full h-full flex flex-wrap items-start justify-start" +
@@ -148,7 +140,7 @@ export default function DeckPrint({ deckListIn }) {
               }
             >
               {page.map((card, j) => (
-                <Card idx={j} isBack={isBack} card={card} />
+                <Card idx={j + "" + i} isBack={isBack} card={card} />
               ))}
             </div>
           </div>

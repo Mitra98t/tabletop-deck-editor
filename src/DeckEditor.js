@@ -186,6 +186,48 @@ export default function DeckEditor({
               <option value="GREEN">Green</option>
               <option value="MIX">Mix</option>
             </select>
+            <select
+              className="select select-bordered w-full"
+              value={currentCard.definition}
+              onChange={(e) => {
+                setCurrentCard({ ...currentCard, definition: e.target.value });
+              }}
+            >
+              <option value="">Select Definition</option>
+              {selectedDeck === "Spell" && (
+                <>
+                  <option value="Spell" selected>
+                    Spell
+                  </option>
+                  <option value="Location">Location</option>
+                </>
+              )}
+              {selectedDeck === "Enemy" && (
+                <>
+                  <option value="Enemy" selected>
+                    Enemy
+                  </option>
+                </>
+              )}
+              {selectedDeck === "Loot" && (
+                <>
+                  <option value="Cockpit">Cockpit</option>
+                  <option value="Engine">Engine</option>
+                  <option value="Tool">Tool</option>
+                  <option value="Wing Attachment">Wing Attachment</option>
+                  <option value="Structure">Structure</option>
+                </>
+              )}
+              {selectedDeck === "Event" && (
+                <>
+                  <option value="Event" selected>
+                    Event
+                  </option>
+                  <option value="Location">Mission</option>
+                  <option value="Mission">Mission</option>
+                </>
+              )}
+            </select>
             <div>
               <p className="mb-1">Quantity</p>
               <input
@@ -293,7 +335,7 @@ export default function DeckEditor({
           </div>
           <div className="w-full h-[45rem] bg-slate-800 rounded-2xl p-4 flex flex-col gap-4">
             <p className="text-2xl font-bold ">Card List</p>
-            <div className="w-full h-auto bg-slate-900 p-4 rounded-2xl grid grid-cols-6 gap-2">
+            <div className="w-full h-auto bg-slate-900 p-4 rounded-2xl grid grid-cols-7 gap-2">
               <button
                 onClick={() => {
                   let oldDeckList = [...deckList];
@@ -337,6 +379,9 @@ export default function DeckEditor({
               >
                 <p className="text-xl font-bold">Type</p>
               </button>
+              <p className="text-xl font-bold btn-ghost hover:bg-transparent">
+                Definition
+              </p>
               <button
                 onClick={() => {
                   console.log("sorting");
@@ -347,7 +392,7 @@ export default function DeckEditor({
                   setDeckList(oldDeckList);
                   saveDeckListToLocalStorage(oldDeckList);
                 }}
-                className="w-fit h-fit flex flex-row gap-2 items-start btn-ghost"
+                className="w-fit h-fit flex flex-row gap-2 items-start btn-ghost col-span-2"
               >
                 <p className="text-xl font-bold">Quantity</p>
               </button>
@@ -358,7 +403,7 @@ export default function DeckEditor({
                 .cards.map((card, i) => (
                   <div
                     key={i + "card"}
-                    className="w-full h-auto p-4 grid grid-cols-6 gap-3"
+                    className="w-full h-auto p-4 grid grid-cols-7 gap-3"
                   >
                     <p className="pl-2 flex items-center justify-start text-xl font-bold">
                       {card.title}
@@ -385,31 +430,36 @@ export default function DeckEditor({
                       </p>
                     </div>
                     <p className="pl-2 flex items-center justify-start">
-                      {card.quantity}
+                      {card.definition}
                     </p>
-                    <div className="flex items-center justify-center gap-4">
-                      <button
-                        className="btn  btn-error h-fit"
-                        onClick={() => {
-                          let oldDeckList = [...deckList];
-                          oldDeckList
-                            .find((deck) => deck.name === selectedDeck)
-                            .cards.splice(i, 1);
-                          setDeckList(oldDeckList);
-                          saveDeckListToLocalStorage(oldDeckList);
-                        }}
-                      >
-                        X
-                      </button>
-                      <button
-                        className="btn  btn-warn h-fit"
-                        onClick={() => {
-                          setCurrentCard(card);
-                          setIsInEdit(card.title);
-                        }}
-                      >
-                        Edit
-                      </button>
+                    <div className="pl-2 flex items-center justify-between col-span-2">
+                      <p className="pl-2 flex items-center justify-start">
+                        {card.quantity}
+                      </p>
+                      <div className="flex items-center justify-center gap-4">
+                        <button
+                          className="btn  btn-error h-fit"
+                          onClick={() => {
+                            let oldDeckList = [...deckList];
+                            oldDeckList
+                              .find((deck) => deck.name === selectedDeck)
+                              .cards.splice(i, 1);
+                            setDeckList(oldDeckList);
+                            saveDeckListToLocalStorage(oldDeckList);
+                          }}
+                        >
+                          X
+                        </button>
+                        <button
+                          className="btn  btn-warn h-fit"
+                          onClick={() => {
+                            setCurrentCard(card);
+                            setIsInEdit(card.title);
+                          }}
+                        >
+                          Edit
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))}
