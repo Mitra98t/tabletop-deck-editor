@@ -27,7 +27,7 @@ export default function Card({ idx, isBack, card }) {
         <>
           <div
             id={idx + "title_box"}
-            className="w-full h-[15mm] flex flex-row items-center justify-center text-4xl font-bold whitespace-nowrap"
+            className="w-full h-[10mm] flex flex-row items-center justify-center text-4xl font-bold whitespace-nowrap"
           >
             <p
               id={idx + "title"}
@@ -43,7 +43,7 @@ export default function Card({ idx, isBack, card }) {
               {card.title.toUpperCase()}
             </p>
           </div>
-          <div id="image" className="w-full h-[35mm] p-[1.5mm] relative">
+          <div id="image" className="w-full h-[35mm] p-[2mm] relative">
             <div className="absolute -bottom-[3mm] left-[8.5mm] w-[50mm] h-[7mm] rounded-[2mm] outline outline-[1mm] outline-[#120e03] "></div>
             <div className="w-full h-full absolute inset-0 border-[1mm] border-[#986526] rounded-[3mm]"></div>
             <div className="bg-red-300 w-full h-full rounded-[1.5mm] "></div>
@@ -55,7 +55,7 @@ export default function Card({ idx, isBack, card }) {
               </div>
             </div>
           </div>
-          <div id="description" className="h-[20mm] p-[1mm]">
+          <div id="description" className="h-[25mm] p-[1mm]">
             <div className="w-full h-full bg-[#ffdea4] rounded-[2.5mm] pt-[2.5mm] ">
               <div className="w-full h-[15mm] rounded-[2.5mm] px-[2mm] py-[0.5mm]">
                 <p className="text-[#120e03] leading-none font-semibold text-sm">
