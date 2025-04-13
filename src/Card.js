@@ -71,7 +71,7 @@ export default function Card({ idx, isBack, card }) {
           <div id="description" className="h-[25mm] p-[1mm]">
             <div className="w-full h-full bg-[#ffdea4] rounded-[2.5mm] px-[2mm] pt-[1mm] flex items-center justify-start">
               {/* <div className="w-full h-[20mm] rounded-[2.5mm] px-[2mm] py-[0.5mm] flex justfy-start items-center"> */}
-              <p className="text-[#120e03] font-desc font-semibold tracking-wide leading-4  text-sm">
+              <p className="text-[#120e03] font-desc font-semibold tracking-wide leading-4 text-left text-sm">
                 {card.description.split("\n").map((line, i) => (
                   <span key={i}>
                     {line}

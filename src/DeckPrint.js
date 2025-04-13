@@ -42,6 +42,25 @@ export default function DeckPrint({ deckListIn }) {
     setPagingSystem(pagingSystem);
   }, [decksToPrint, deckList]);
 
+  const handleDownloadJPG = async (card) => {
+    // remove starting numbers
+    let name = card.replace(/^\d+/, "");
+    // remove ending numbers
+    name = name.replace(/\d+$/, "");
+    name = name.replace(/\s/g, "_");
+    const elements = document.getElementById(card);
+    let canv = await html2canvas(elements, {
+      scale: 5,
+      dpi: 300,
+    });
+    let a = document.createElement("a");
+    a.href = canv.toDataURL("image/png");
+    a.download = name + ".png";
+    a.click();
+    a.remove();
+    return;
+  };
+
   const handleDownloadPdf = async () => {
     const elements = document.getElementsByClassName("page");
     const canvases = [];
@@ -149,7 +168,12 @@ export default function DeckPrint({ deckListIn }) {
               }
             >
               {page.map((card, j) => (
-                <Card idx={j + "" + i} isBack={isBack} card={card} />
+                <button
+                  id={j + card.title + i}
+                  onClick={() => handleDownloadJPG(j + card.title + i)}
+                >
+                  <Card idx={j + card.title + i} isBack={isBack} card={card} />
+                </button>
               ))}
             </div>
           </div>
