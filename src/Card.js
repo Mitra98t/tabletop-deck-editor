@@ -48,11 +48,11 @@ export default function Card({ idx, isBack, card }) {
             <div className="w-full h-full absolute inset-0 border-[1mm] border-[#986526] rounded-[3mm]"></div>
             <div className="bg-red-300 w-full h-full rounded-[1.5mm] "></div>
             <div className="absolute -bottom-[3mm] left-[8.5mm] w-[50mm] h-[7mm] rounded-[2mm] border-[1mm] border-[#986526] bg-[#120e03] flex items-center justify-center font-bold text-sm ">
-              <p className="scale-x-90">
+              <div className="scale-x-90">
                 {card.definition
                   ? card.definition.toUpperCase()
                   : card.deckName.toUpperCase()}
-              </p>
+              </div>
             </div>
           </div>
           <div id="description" className="h-[20mm] p-[1mm]">

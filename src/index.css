@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  img {
+    @apply inline-block;
+  }
+}
+
 .animationWrapper * {
   @apply duration-200 transition-all ease-in-out
 }

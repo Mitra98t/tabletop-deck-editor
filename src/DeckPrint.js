@@ -29,7 +29,8 @@ export default function DeckPrint({ deckListIn }) {
     const pageHeight = 297;
 
     const cardsPerPage =
-      Math.floor(pageWidth / cardWidth) * Math.floor(pageHeight / cardHeight);
+      Math.floor((pageWidth - 20) / cardWidth) *
+      Math.floor((pageHeight - 10) / cardHeight);
 
     const pages = Math.ceil(allCards.length / cardsPerPage);
     let pagingSystem = [];
@@ -41,29 +42,28 @@ export default function DeckPrint({ deckListIn }) {
     setPagingSystem(pagingSystem);
   }, [decksToPrint, deckList]);
 
-  const printDocument = () => {
-    const input = document.getElementById("divToPrint");
-    html2canvas(input).then((canvas) => {
-      const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF();
-      pdf.addImage(imgData, "JPEG", 0, 0);
-      // pdf.output('dataurlnewwindow');
-      pdf.save("download.pdf");
-    });
-  };
   const handleDownloadPdf = async () => {
     const elements = document.getElementsByClassName("page");
     const canvases = [];
-    var doc = new jsPDF("p", "mm");
+    var doc = new jsPDF({
+      orientation: "p",
+      unit: "mm",
+      // format: "a4",
+      userUnit: 72,
+    });
     let imgWidth = 210;
 
     for (let i = 0; i < elements.length; i++) {
       const page = elements[i];
-      let canv = await html2canvas(page);
+      let canv = await html2canvas(page, {
+        dpi: 300,
+        
+      });
       canvases.push(canv);
     }
 
     var imgData = canvases[0].toDataURL("image/png");
+
     doc.addImage(
       imgData,
       "PNG",
@@ -131,7 +131,7 @@ export default function DeckPrint({ deckListIn }) {
         {pagingSystem.map((page, i) => (
           <div
             key={i + "page"}
-            className="page w-[210mm] min-h-[297mm] h-fit bg-white p-[10mm] relative"
+            className="page w-[210mm] min-h-[297mm] h-fit bg-white px-[10mm] py-[5mm] relative"
           >
             <div
               className={
