@@ -235,7 +235,7 @@ export default function DeckEditor({
                 <input
                   className="w-1/2"
                   type="file"
-                  accept=".jpg, .png, .jpeg"
+                  accept=".jpg, .png, .jpeg, .webp"
                   id="image"
                   alt="card_image"
                   onChange={(e) => {
