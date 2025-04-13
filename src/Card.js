@@ -46,7 +46,20 @@ export default function Card({ idx, isBack, card }) {
           <div id="image" className="w-full h-[35mm] p-[2mm] relative">
             <div className="absolute -bottom-[3mm] left-[8.5mm] w-[50mm] h-[7mm] rounded-[2mm] outline outline-[1mm] outline-[#120e03] "></div>
             <div className="w-full h-full absolute inset-0 border-[1mm] border-[#986526] rounded-[3mm]"></div>
-            <div className="bg-red-300 w-full h-full rounded-[1.5mm] "></div>
+            <div
+              className="w-full h-full rounded-[1.5mm] "
+              style={{
+                backgroundImage: `linear-gradient(to bottom, ${
+                  palette[card.type]
+                } 0%, #120e03 100%)`,
+              }}
+            >
+              <img
+                src={card.image}
+                alt="graphic"
+                className="w-full h-full object-cover rounded-[1.5mm]"
+              />
+            </div>
             <div className="absolute -bottom-[3mm] left-[8.5mm] w-[50mm] h-[7mm] rounded-[2mm] border-[1mm] border-[#986526] bg-[#120e03] flex items-center justify-center font-bold text-sm ">
               <div className="scale-x-90">
                 {card.definition
@@ -56,17 +69,17 @@ export default function Card({ idx, isBack, card }) {
             </div>
           </div>
           <div id="description" className="h-[25mm] p-[1mm]">
-            <div className="w-full h-full bg-[#ffdea4] rounded-[2.5mm] pt-[2.5mm] ">
-              <div className="w-full h-[15mm] rounded-[2.5mm] px-[2mm] py-[0.5mm]">
-                <p className="text-[#120e03] leading-none font-semibold text-sm">
-                  {card.description.split("\n").map((line, i) => (
-                    <span key={i}>
-                      {line}
-                      <br />
-                    </span>
-                  ))}
-                </p>
-              </div>
+            <div className="w-full h-full bg-[#ffdea4] rounded-[2.5mm] px-[2mm] pt-[1mm] flex items-center justify-start">
+              {/* <div className="w-full h-[20mm] rounded-[2.5mm] px-[2mm] py-[0.5mm] flex justfy-start items-center"> */}
+              <p className="text-[#120e03] leading-none font-semibold text-sm">
+                {card.description.split("\n").map((line, i) => (
+                  <span key={i}>
+                    {line}
+                    <br />
+                  </span>
+                ))}
+              </p>
+              {/* </div> */}
             </div>
           </div>
           {/*

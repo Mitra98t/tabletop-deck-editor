@@ -229,6 +229,40 @@ export default function DeckEditor({
               )}
             </select>
             <div>
+              {/* image input */}
+              <p className="mb-1">Image</p>
+              <div className="w-full h-fit flex flex-row items-center justify-between">
+                <input
+                  className="w-1/2"
+                  type="file"
+                  accept=".jpg, .png, .jpeg"
+                  id="image"
+                  alt="card_image"
+                  onChange={(e) => {
+                    const reader = new FileReader();
+                    reader.readAsDataURL(e.target.files[0]);
+                    reader.onload = () => {
+                      setCurrentCard({
+                        ...currentCard,
+                        image: reader.result,
+                      });
+                    };
+                  }}
+                />
+                {currentCard.image ? (
+                  <img
+                    src={currentCard.image}
+                    alt="card_image"
+                    className="w-1/2 h-20 rounded-lg object-cover"
+                  />
+                ) : (
+                  <div className="w-1/2 h-20 rounded-lg bg-slate-900 flex items-center justify-center">
+                    <p className="text-slate-500">No image selected</p>
+                  </div>
+                )}
+              </div>
+            </div>
+            <div>
               <p className="mb-1">Quantity</p>
               <input
                 type="number"

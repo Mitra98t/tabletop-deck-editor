@@ -133,6 +133,15 @@ export default function DeckPrint({ deckListIn }) {
             key={i + "page"}
             className="page w-[210mm] min-h-[297mm] h-fit bg-white px-[10mm] py-[5mm] relative"
           >
+            <div className="absolute top-0 right-0 text-black">
+              rounded corners 3mm
+              <br />
+              card dimension
+              <br />
+              70mm x 70mm
+              <br />
+              padding 10mm x 5mm
+            </div>
             <div
               className={
                 "w-full h-full flex flex-wrap items-start justify-start" +
