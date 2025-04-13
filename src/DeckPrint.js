@@ -56,8 +56,8 @@ export default function DeckPrint({ deckListIn }) {
     for (let i = 0; i < elements.length; i++) {
       const page = elements[i];
       let canv = await html2canvas(page, {
+        scale: 5,
         dpi: 300,
-        
       });
       canvases.push(canv);
     }
