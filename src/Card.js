@@ -22,12 +22,12 @@ export default function Card({ idx, isBack, card }) {
       }
     >
       {isBack ? (
-        <p className="text-4xl font-bold">{card.deckName.toUpperCase()}</p>
+        <p className="text-4xl font-bebas">{card.deckName.toUpperCase()}</p>
       ) : (
         <>
           <div
             id={idx + "title_box"}
-            className="w-full h-[10mm] flex flex-row items-center justify-center text-4xl font-bold whitespace-nowrap"
+            className="w-full h-[10mm] flex flex-row items-center justify-center font-bebas text-4xl whitespace-nowrap"
           >
             <p
               id={idx + "title"}
@@ -38,7 +38,7 @@ export default function Card({ idx, isBack, card }) {
                     : 1
                 })`,
               }}
-              className="mb-[1mm]"
+              className="mt-[1.5mm]"
             >
               {card.title.toUpperCase()}
             </p>
@@ -60,7 +60,7 @@ export default function Card({ idx, isBack, card }) {
                 className="w-full h-full object-cover rounded-[1.5mm]"
               />
             </div>
-            <div className="absolute -bottom-[3mm] left-[8.5mm] w-[50mm] h-[7mm] rounded-[2mm] border-[1mm] border-[#986526] bg-[#120e03] flex items-center justify-center font-bold text-sm ">
+            <div className="absolute pt-0.5 font-bebas text-xl -bottom-[3mm] left-[8.5mm] w-[50mm] h-[7mm] rounded-[2mm] border-[1mm] border-[#986526] bg-[#120e03] flex items-center justify-center ">
               <div className="scale-x-90">
                 {card.definition
                   ? card.definition.toUpperCase()
@@ -71,7 +71,7 @@ export default function Card({ idx, isBack, card }) {
           <div id="description" className="h-[25mm] p-[1mm]">
             <div className="w-full h-full bg-[#ffdea4] rounded-[2.5mm] px-[2mm] pt-[1mm] flex items-center justify-start">
               {/* <div className="w-full h-[20mm] rounded-[2.5mm] px-[2mm] py-[0.5mm] flex justfy-start items-center"> */}
-              <p className="text-[#120e03] leading-none font-semibold text-sm">
+              <p className="text-[#120e03] font-desc font-semibold tracking-wide leading-4  text-sm">
                 {card.description.split("\n").map((line, i) => (
                   <span key={i}>
                     {line}
