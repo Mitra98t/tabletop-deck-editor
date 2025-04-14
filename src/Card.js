@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { palette } from "./utils";
 import { useState } from "react";
 import { use } from "react";
+import texture from "./assets/texture_old_paper.webp";
 
 export default function Card({ idx, isBack, card }) {
   const [titleDimension, setTitleDimension] = useState(0);
@@ -17,10 +18,18 @@ export default function Card({ idx, isBack, card }) {
     <div
       key={idx + "card"}
       className={
-        "w-[70mm] h-[70mm] text-[#ffdea4] border-[1.5mm] border-[#986526] rounded-[5mm] bg-[#120e03] flex flex-col overflow-hidden" +
+        "w-[70mm] h-[70mm] text-[#ffdea4] border-[1.5mm] border-[#986526] rounded-[5mm] bg-[#120e03] flex flex-col overflow-hidden relative" +
         (isBack ? " items-center justify-center " : "")
       }
     >
+      <img
+        src={texture}
+        className=" opacity-45 absolute w-[70mm] object-cover mix-blend-color-dodge invert sepia z-50 scale-105"
+      />
+      <img
+        src={texture}
+        className="opacity-80 absolute w-[70mm] object-cover mix-blend-darken z-50 scale-105"
+      />
       {isBack ? (
         <p className="text-4xl font-bebas">{card.deckName.toUpperCase()}</p>
       ) : (
@@ -71,7 +80,7 @@ export default function Card({ idx, isBack, card }) {
           <div id="description" className="h-[25mm] p-[1mm]">
             <div className="w-full h-full bg-[#ffdea4] rounded-[2.5mm] px-[2mm] pt-[1mm] flex items-center justify-start">
               {/* <div className="w-full h-[20mm] rounded-[2.5mm] px-[2mm] py-[0.5mm] flex justfy-start items-center"> */}
-              <p className="text-[#120e03] font-desc font-semibold tracking-wide leading-4 text-left text-sm">
+              <p className="text-[#120e03] font-desc font-semibold tracking-wide leading-4 text-left text-sm z-[60]">
                 {card.description.split("\n").map((line, i) => (
                   <span key={i}>
                     {line}
