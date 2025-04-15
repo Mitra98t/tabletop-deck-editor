@@ -7,7 +7,7 @@ export default function DeckPrint({ deckListIn }) {
   const [isBack, setIsBack] = useState(false);
   const [deckList, setDeckList] = useState(deckListIn);
   const [decksToPrint, setDecksToPrint] = useState(
-    deckList.map((deck) => deck.name)
+    deckList.map((deck) => deck.name),
   );
   const [pagingSystem, setPagingSystem] = useState([]);
   useEffect(() => {
@@ -36,7 +36,7 @@ export default function DeckPrint({ deckListIn }) {
     let pagingSystem = [];
     for (let i = 0; i < pages; i++) {
       pagingSystem.push(
-        allCards.slice(i * cardsPerPage, (i + 1) * cardsPerPage)
+        allCards.slice(i * cardsPerPage, (i + 1) * cardsPerPage),
       );
     }
     setPagingSystem(pagingSystem);
@@ -89,7 +89,7 @@ export default function DeckPrint({ deckListIn }) {
       0,
       0,
       imgWidth,
-      Math.ceil((canvases[0].height * imgWidth) / canvases[0].width)
+      Math.ceil((canvases[0].height * imgWidth) / canvases[0].width),
     );
 
     for (let idx = 1; idx < canvases.length; idx++) {
@@ -152,7 +152,7 @@ export default function DeckPrint({ deckListIn }) {
             key={i + "page"}
             className="page w-[210mm] min-h-[297mm] h-fit bg-white px-[10mm] py-[5mm] relative"
           >
-            <div className="absolute top-0 right-0 text-black">
+            {/*<div className="absolute top-0 right-0 text-black">
               rounded corners 3mm
               <br />
               card dimension
@@ -160,7 +160,7 @@ export default function DeckPrint({ deckListIn }) {
               70mm x 70mm
               <br />
               padding 10mm x 5mm
-            </div>
+            </div>*/}
             <div
               className={
                 "w-full h-full flex flex-wrap items-start justify-start" +
@@ -240,7 +240,7 @@ export default function DeckPrint({ deckListIn }) {
             </div>
           ) : (
             <></>
-          )
+          ),
         )}
       </div>
     </div>
