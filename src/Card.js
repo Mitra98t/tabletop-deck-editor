@@ -22,14 +22,14 @@ export default function Card({ idx, isBack, card }) {
         (isBack ? " items-center justify-center " : "")
       }
     >
-      <img
+      {/*<img
         src={texture}
         className=" opacity-45 absolute w-[70mm] object-cover mix-blend-color-dodge invert sepia z-50 scale-105"
       />
       <img
         src={texture}
         className="opacity-80 absolute w-[70mm] object-cover mix-blend-darken z-50 scale-105"
-      />
+      />*/}
       {isBack ? (
         <p className="text-4xl font-bebas">{card.deckName.toUpperCase()}</p>
       ) : (
